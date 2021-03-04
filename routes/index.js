@@ -21,6 +21,16 @@ router.post('/notification',async function(req, res, next) {
   const response = await OnesignalService.createNotification(body);
   res.json(response);
 });
+router.get('/notification/:notificationId',async function(req, res, next) {
+  let {params} = req;
+  const response = await OnesignalService.viewNotification(params);
+  res.json(response);
+});
+router.get('/notifications',async function(req, res, next) {
+  let {query} = req;
+  const response = await OnesignalService.viewNotifications(query);
+  res.json(response);
+});
 router.post('/add-device',async function(req, res, next) {
   let {body} = req;
   const response = await OnesignalService.addDevice(body);
@@ -29,6 +39,17 @@ router.post('/add-device',async function(req, res, next) {
 router.get('/view-devices',async function(req, res, next) {
   let {query} = req;
   const response = await OnesignalService.viewDevices(query);
+  res.json(response);
+});
+router.get('/view-device/:device_id',async function(req, res, next) {
+  let {device_id} = req.params;
+  const response = await OnesignalService.viewDevice(device_id);
+  res.json(response);
+});
+router.put('/edit-devices/:device_id',async function(req, res, next) {
+  let {body} = req;
+  let {device_id} = req.params;
+  const response = await OnesignalService.editDevice(device_id,body);
   res.json(response);
 });
 module.exports = router;
