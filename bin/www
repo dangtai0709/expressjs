@@ -3,11 +3,18 @@
 /**
  * Module dependencies.
  */
-
+ var ENV="local1"
 var app = require('../app');
 var debug = require('debug')('node:server');
 var http = require('http');
-
+const https = require('https');
+const fs = require('fs');
+//https://nodejs.org/en/knowledge/HTTP/servers/how-to-create-a-HTTPS-server/
+const options = {
+  key: fs.readFileSync('key.pem'),
+  cert: fs.readFileSync('cert.pem')
+};
+var httpsServer = https.createServer(options, app);
 /**
  * Get port from environment and store in Express.
  */
@@ -18,8 +25,12 @@ app.set('port', port);
 /**
  * Create HTTP server.
  */
-
-var server = http.createServer(app);
+ if(ENV=="local"){
+  httpsServer.listen(3600)
+  var server = http.createServer(app);
+ }else{
+  var server = https.createServer(options,app)
+ }
 
 /**
  * Listen on provided port, on all network interfaces.
